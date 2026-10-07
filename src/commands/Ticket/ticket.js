@@ -1,5 +1,16 @@
 import { getColor } from '../../config/bot.js';
-import { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from 'discord.js';
+import {
+  SlashCommandBuilder,
+  PermissionFlagsBits,
+  PermissionsBitField,
+  ChannelType,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
+  MessageFlags
+} from 'discord.js';
 import { createEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/embeds.js';
 import { getGuildConfig, setGuildConfig } from '../../services/config/guildConfig.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
@@ -142,12 +153,43 @@ description: panelMessage,
                 color: getColor('info')
             });
 
-            const ticketButton = new ActionRowBuilder().addComponents(
-                new ButtonBuilder()
-                    .setCustomId("create_ticket")
-.setLabel(buttonLabel)
-                    .setStyle(ButtonStyle.Primary)
-                    .setEmoji("📩"),
+            const ticketMenu = new ActionRowBuilder().addComponents(
+  new StringSelectMenuBuilder()
+    .setCustomId("ticket_type")
+    .setPlaceholder("Make a selection")
+    .addOptions(
+      new StringSelectMenuOptionBuilder()
+        .setLabel("شكوى ضد إداري")
+        .setDescription("تقديم شكوى ضد أحد الإداريين")
+        .setEmoji("🛡️")
+        .setValue("admin_complaint"),
+
+      new StringSelectMenuOptionBuilder()
+        .setLabel("شكوى ضد مشرف إداري")
+        .setDescription("تقديم شكوى ضد مشرف إداري")
+        .setEmoji("💗")
+        .setValue("staff_complaint"),
+
+      new StringSelectMenuOptionBuilder()
+        .setLabel("اقتراح")
+        .setDescription("تقديم اقتراح للإدارة")
+        .setEmoji("🔴")
+        .setValue("suggestion"),
+
+      new StringSelectMenuOptionBuilder()
+        .setLabel("استفسار")
+        .setDescription("فتح تذكرة للاستفسار")
+        .setEmoji("❓")
+        .setValue("question"),
+
+      new StringSelectMenuOptionBuilder()
+        .setLabel("تعويض")
+        .setDescription("طلب تعويض")
+        .setEmoji("⏱️")
+        .setValue("compensation"),
+    ),
+);
+     
             );
 
             try {
